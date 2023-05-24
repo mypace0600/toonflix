@@ -10,13 +10,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int totalSeconds = 1500;
+  static const twentyFiveMinutes = 1500;
+  int totalSeconds = twentyFiveMinutes;
+  bool isRunning = false;
   late Timer timer;
+  int totalDoneCount = 0;
 
   void onTick(Timer timer) {
     setState(() {
       totalSeconds = totalSeconds - 1;
     });
+
+    if (totalSeconds == 0) {
+      setState(() {
+        totalDoneCount = totalDoneCount + 1;
+        totalSeconds = twentyFiveMinutes;
+      });
+      onPausePressed();
+    }
   }
 
   void onStartPressed() {
@@ -24,6 +35,21 @@ class _HomeScreenState extends State<HomeScreen> {
       const Duration(seconds: 1),
       onTick,
     );
+    setState(() {
+      isRunning = true;
+    });
+  }
+
+  void onPausePressed() {
+    timer.cancel();
+    setState(() {
+      isRunning = false;
+    });
+  }
+
+  String format(int seconds) {
+    var duration = Duration(seconds: seconds);
+    return duration.toString().split(".").first.substring(2);
   }
 
   @override
@@ -37,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Container(
               alignment: Alignment.bottomCenter,
               child: Text(
-                '$totalSeconds',
+                format(totalSeconds),
                 style: TextStyle(
                   color: Theme.of(context).cardColor,
                   fontSize: 89,
@@ -50,9 +76,11 @@ class _HomeScreenState extends State<HomeScreen> {
             flex: 3,
             child: Center(
               child: IconButton(
-                onPressed: onStartPressed,
-                icon: const Icon(
-                  Icons.play_circle_filled_outlined,
+                onPressed: isRunning ? onPausePressed : onStartPressed,
+                icon: Icon(
+                  isRunning
+                      ? Icons.pause_circle_outlined
+                      : Icons.play_circle_filled_outlined,
                 ),
                 iconSize: 130,
                 color: Theme.of(context).cardColor,
@@ -82,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         Text(
-                          '0',
+                          '$totalDoneCount',
                           style: TextStyle(
                             fontSize: 60,
                             color:
