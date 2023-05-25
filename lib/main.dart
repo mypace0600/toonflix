@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:toonflix/screens/home_screen.dart';
+import 'package:toonflix/services/api_service.dart';
 
 void main() {
+  ApiService().getTodaysToons();
   runApp(const App());
 }
 
@@ -11,18 +12,20 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        textTheme: const TextTheme(
-          displayLarge: TextStyle(
-            color: Color(0xFF232B55),
+      home: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          elevation: 2,
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.green,
+          title: const Text(
+            "Today's Toons",
+            style: TextStyle(
+              fontSize: 25,
+            ),
           ),
         ),
-        colorScheme: ColorScheme.fromSwatch(
-          backgroundColor: const Color(0xFFE7626C),
-        ),
-        cardColor: const Color(0xFFF4EDDB),
       ),
-      home: const HomeScreen(),
     );
   }
 }
