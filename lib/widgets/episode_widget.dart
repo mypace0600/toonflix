@@ -2,21 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class EpisodeWidget extends StatelessWidget {
-  final String id, title, rating, date;
+  final String epId, title, rating, date, toonId;
 
   const EpisodeWidget({
     super.key,
     required this.title,
     required this.rating,
-    required this.id,
+    required this.epId,
     required this.date,
+    required this.toonId,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Uri url = Uri.parse("https://comic.naver.com/webtoon/");
+        Uri url = Uri.parse(
+            "https://comic.naver.com/webtoon/detail?titleId=$toonId&no=$epId");
         launchUrl(url);
       },
       child: Container(
